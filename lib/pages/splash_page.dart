@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:get_it/get_it.dart';
 import 'package:movie_app/models/app_config.dart';
 import 'package:movie_app/services/http_services.dart';
+import 'package:movie_app/services/movie_services.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key, required this.onInitilizationComplete});
@@ -17,8 +18,13 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1500)).then((value) =>
-        _setup(context).then((_) => widget.onInitilizationComplete()));
+    //Future.delayed(const Duration(seconds: 2)).then((value) =>
+    //    _setup(context).then((_) => widget.onInitilizationComplete()));
+    Future.delayed(const Duration(seconds: 1)).then(
+      (_) => _setup(context).then(
+        (_) => widget.onInitilizationComplete(),
+      ),
+    );
   }
 
   Future<void> _setup(BuildContext context) async {
@@ -30,6 +36,7 @@ class _SplashPageState extends State<SplashPage> {
         baseImageApiUrl: configData["BASE_IMAGE_API_URL"],
         apiKey: configData["API_KEY"]));
     getIt.registerSingleton<HttpServices>(HttpServices());
+    getIt.registerSingleton<MovieServices>(MovieServices());
   }
 
   @override
