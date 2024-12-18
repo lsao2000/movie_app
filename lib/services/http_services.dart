@@ -17,7 +17,6 @@ class HttpServices {
     try {
       String url = "$_baseUrl/$type";
       Map<String, dynamic> query = {"api_key": _apiKey, "language": "en_US"};
-      print(_apiKey);
       return await dio.get(url, queryParameters: query);
     } on DioException catch (e) {
       print("Error ${e.message.toString()}");

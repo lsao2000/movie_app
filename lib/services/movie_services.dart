@@ -8,8 +8,9 @@ class MovieServices {
   MovieServices() {
     httpServices = getIt.get<HttpServices>();
   }
-  Future<Response> getUpcomingMovies() async {
-    Response? data = await httpServices.get("movie/upcoming");
+  Future<Response> getMovies({required String type}) async {
+    Response? data = await httpServices.get("movie/$type");
     return data!;
   }
+
 }

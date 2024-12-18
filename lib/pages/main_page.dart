@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:movie_app/controllers/main_page_controller.dart';
@@ -11,14 +10,13 @@ import 'package:movie_app/pages/movie_screen.dart';
 
 //var categoryType = StateProvider<String>((ref) => SearchCategory.popular);
 var mainPageProvider = StateNotifierProvider<MainPageController, MainPageData>(
-    (ref) => MainPageController(MainPageData(SearchCategory.popular)));
+    (ref) => MainPageController(MainPageData.initial()));
 
 enum Rating { oneStar, twoStar, threeStar, fourStar, fiveStar }
 
 class MainPage extends ConsumerWidget {
   MainPage({super.key});
   final TextEditingController _searchController = TextEditingController();
-  //String category = SearchCategory.popular;
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     double width = MediaQuery.of(context).size.width;
@@ -69,7 +67,7 @@ class MainPage extends ConsumerWidget {
   Widget _forgroundWidget(
       {required double width, required double height, required WidgetRef ref}) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, height * 0.02, 0, 0),
+      padding: EdgeInsets.fromLTRB(0, height * 0.05, 0, 0),
       width: width * 0.88,
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -77,11 +75,12 @@ class MainPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           _topBarWidget(width: width, height: height, ref: ref),
-          Container(
-            height: height * 0.83,
+          Expanded(
+              //height: height * 0.83,
+              child: Container(
             padding: EdgeInsets.symmetric(vertical: height * 0.01),
-            child: _moviesListWidget(height: height, width: width),
-          )
+            child: _moviesListWidget(height: height, width: width, ref: ref),
+          ))
         ],
       ),
     );
@@ -176,20 +175,21 @@ class MainPage extends ConsumerWidget {
     );
   }
 
-  Widget _moviesListWidget({required double height, required double width}) {
-    List<Movie> movies = [];
-    for (var i = 0; i < 20; i++) {
-      movies.add(Movie(
-          name: "Elevation",
-          language: "AR",
-          isAdult: false,
-          description:
-              "A single father and two women venture from the safety of their homes to face monstrous creatures to save the life of a young boy.",
-          posterPath: "uQhYBxOVFU6s9agD49FnGHwJqG5.jpg",
-          backdropPath: "/au3o84ub27qTZiMiEc9UYzN74V3.jpg",
-          rating: 4.8,
-          releaseDate: "2024/17/12"));
-    }
+  Widget _moviesListWidget(
+      {required double height, required double width, required WidgetRef ref}) {
+    List<Movie> movies = ref.watch(mainPageProvider).lstMovies;
+    //for (var i = 0; i < 20; i++) {
+    //  movies.add(Movie(
+    //      name: "Elevation",
+    //      language: "AR",
+    //      isAdult: false,
+    //      description:
+    //          "A single father and two women venture from the safety of their homes to face monstrous creatures to save the life of a young boy.",
+    //      posterPath: "uQhYBxOVFU6s9agD49FnGHwJqG5.jpg",
+    //      backdropPath: "/au3o84ub27qTZiMiEc9UYzN74V3.jpg",
+    //      rating: 4.8,
+    //      releaseDate: "2024/17/12"));
+    //}
     if (movies.isNotEmpty) {
       return ListView.builder(
           itemCount: movies.length,
