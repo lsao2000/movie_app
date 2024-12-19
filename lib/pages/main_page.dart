@@ -2,11 +2,13 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get_it/get_it.dart';
 import 'package:movie_app/controllers/main_page_controller.dart';
 import 'package:movie_app/models/main_page_data.dart';
 import 'package:movie_app/models/movie.dart';
 import 'package:movie_app/models/search_category.dart';
 import 'package:movie_app/pages/movie_screen.dart';
+import 'package:movie_app/services/movie_services.dart';
 
 //var categoryType = StateProvider<String>((ref) => SearchCategory.popular);
 var mainPageProvider = StateNotifierProvider<MainPageController, MainPageData>(
@@ -137,6 +139,10 @@ class MainPage extends ConsumerWidget {
     return DropdownButton(
       onChanged: (value) {
         ref.watch(mainPageProvider.notifier).updateCategory(category: value);
+        //var movieServices = GetIt.instance.get<MovieServices>();
+        //movieServices.getMovies(
+        //    type: ref.watch(mainPageProvider).searchCategory.toLowerCase(),
+        //    page: ref.watch(mainPageProvider).page);
       },
       underline: Container(
         height: 1,

@@ -56,7 +56,8 @@ class MovieScreen extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        SizedBox(
+        Container(
+            margin: EdgeInsets.only(right: width * 0.06),
           width: width * 0.4,
           child: Text(
             movie.name,
@@ -69,7 +70,7 @@ class MovieScreen extends StatelessWidget {
           ),
         ),
         Text(
-          movie.rating.toDouble().toString(),
+          movie.rating.toDouble().toStringAsFixed(1).toString(),
           style: const TextStyle(
             color: Colors.white,
             fontSize: 20,
