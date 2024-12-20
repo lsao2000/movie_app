@@ -24,4 +24,15 @@ class HttpServices {
       //return dio.
     }
   }
+
+  Future<Response?> search(String type, {Map<String, dynamic>? query}) async {
+    try {
+      String url = "$_baseUrl/$type";
+      Map<String, dynamic> query = {"api_key": _apiKey, "language": "en_US"};
+      return await dio.get(url, queryParameters: query);
+    } on DioException catch (e) {
+      print("Error ${e.message.toString()}");
+      return null;
+    }
+  }
 }

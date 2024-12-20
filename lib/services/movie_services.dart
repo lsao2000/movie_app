@@ -20,4 +20,9 @@ class MovieServices {
     }
     throw Exception("couldn't load latest movies");
   }
+
+  Future<List<Movie>> searchMovies() async {
+
+    return [];
+  }
 }
