@@ -38,7 +38,7 @@ class MainPageController extends StateNotifier<MainPageData> {
     await movieServices
         .searchMovies(searchQuery: querySearch, page: state.page)
         .then((value) {
-            print(value);
+      print(value);
       var searchCategory = state.searchCategory;
       if (value.isNotEmpty) {
         state = MainPageData(

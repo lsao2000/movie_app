@@ -14,6 +14,13 @@ import 'package:movie_app/services/movie_services.dart';
 var mainPageProvider = StateNotifierProvider<MainPageController, MainPageData>(
     (ref) => MainPageController(MainPageData.initial()));
 
+var selectedImageForBackground = StateProvider<String>((ref) {
+  var movies = ref.watch(mainPageProvider).lstMovies;
+  return movies.length != 0
+      ? movies[0].getPosterUrl()
+      : "https://images-na.ssl-images-amazon.com/images/I/91B32iU7ayL._AC_SL1500_.jpg";
+});
+
 enum Rating { oneStar, twoStar, threeStar, fourStar, fiveStar }
 
 class MainPage extends ConsumerWidget {
@@ -37,7 +44,7 @@ class MainPage extends ConsumerWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            _backgroundWidget(width: width, height: height),
+            _backgroundWidget(width: width, height: height, ref: ref),
             _forgroundWidget(width: width, height: height, ref: ref)
           ],
         ),
@@ -45,17 +52,20 @@ class MainPage extends ConsumerWidget {
     );
   }
 
-  Widget _backgroundWidget({required double width, required double height}) {
+  Widget _backgroundWidget(
+      {required double width, required double height, required WidgetRef ref}) {
+    String image = ref.watch(selectedImageForBackground);
     return Container(
       height: height,
       width: width,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(width * 0.01),
-        image: const DecorationImage(
-            fit: BoxFit.cover,
-            image: NetworkImage(
-              "https://images-na.ssl-images-amazon.com/images/I/91B32iU7ayL._AC_SL1500_.jpg",
-            )),
+        image: DecorationImage(
+          fit: BoxFit.cover,
+          image: NetworkImage(
+            ref.watch(selectedImageForBackground),
+          ),
+        ),
       ),
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
@@ -187,18 +197,6 @@ class MainPage extends ConsumerWidget {
   Widget _moviesListWidget(
       {required double height, required double width, required WidgetRef ref}) {
     List<Movie> movies = ref.watch(mainPageProvider).lstMovies;
-    //for (var i = 0; i < 20; i++) {
-    //  movies.add(Movie(
-    //      name: "Elevation",
-    //      language: "AR",
-    //      isAdult: false,
-    //      description:
-    //          "A single father and two women venture from the safety of their homes to face monstrous creatures to save the life of a young boy.",
-    //      posterPath: "uQhYBxOVFU6s9agD49FnGHwJqG5.jpg",
-    //      backdropPath: "/au3o84ub27qTZiMiEc9UYzN74V3.jpg",
-    //      rating: 4.8,
-    //      releaseDate: "2024/17/12"));
-    //}
     if (movies.isNotEmpty) {
       return ListView.builder(
           itemCount: movies.length,
@@ -207,7 +205,10 @@ class MainPage extends ConsumerWidget {
               padding:
                   EdgeInsets.symmetric(vertical: height * 0.01, horizontal: 0),
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  ref.watch(selectedImageForBackground.notifier).state =
+                      movies[index].getPosterUrl();
+                },
                 child: MovieScreen(movie: movies[index]),
               ),
             );
