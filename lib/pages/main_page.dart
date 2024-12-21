@@ -78,11 +78,11 @@ class MainPage extends ConsumerWidget {
         children: [
           _topBarWidget(width: width, height: height, ref: ref),
           Expanded(
-              //height: height * 0.83,
-              child: Container(
-            padding: EdgeInsets.symmetric(vertical: height * 0.01),
-            child: _moviesListWidget(height: height, width: width, ref: ref),
-          ))
+            child: Container(
+              padding: EdgeInsets.symmetric(vertical: height * 0.01),
+              child: _moviesListWidget(height: height, width: width, ref: ref),
+            ),
+          ),
         ],
       ),
     );
@@ -100,34 +100,37 @@ class MainPage extends ConsumerWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          _searchFieldWidget(width: width, height: height),
+          _searchFieldWidget(width: width, height: height, ref: ref),
           _categoryWidget(width: width, height: height, ref: ref)
         ],
       ),
     );
   }
 
-  Widget _searchFieldWidget({required double width, required double height}) {
-    final _border = InputBorder.none;
+  Widget _searchFieldWidget(
+      {required double width, required double height, required WidgetRef ref}) {
+    const border = InputBorder.none;
     return Container(
       width: width * 0.50,
       height: height * 0.05,
       child: TextField(
         controller: _searchController,
         style: const TextStyle(color: Colors.white),
-        decoration: InputDecoration(
-          focusedBorder: _border,
-          border: _border,
+        decoration: const InputDecoration(
+          focusedBorder: border,
+          border: border,
           hintText: "Search...",
-          hintStyle: const TextStyle(color: Colors.white38),
+          hintStyle: TextStyle(color: Colors.white38),
           filled: false,
           fillColor: Colors.white24,
-          prefixIcon: const Icon(
+          prefixIcon: Icon(
             Icons.search,
             color: Colors.white,
           ),
         ),
-        onSubmitted: (value) {},
+        onSubmitted: (value) {
+          ref.watch(mainPageProvider.notifier).searchMovie(querySearch: value);
+        },
       ),
     );
   }

@@ -21,8 +21,15 @@ class MovieServices {
     throw Exception("couldn't load latest movies");
   }
 
-  Future<List<Movie>> searchMovies() async {
-
+  Future<List<Movie>> searchMovies(
+      {required String searchQuery, required int page}) async {
+    Response? data = await httpServices.search("search/movie", searchQuery);
+    if (data!.statusCode == 200) {
+      Map getData = data.data;
+      List<Movie> movies =
+          getData['results'].map<Movie>((el) => Movie.fromJson(el)).toList();
+      return movies;
+    }
     return [];
   }
 }

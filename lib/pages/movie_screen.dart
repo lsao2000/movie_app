@@ -16,12 +16,19 @@ class MovieScreen extends StatelessWidget {
         children: [
           ClipRRect(
             //borderRadius: BorderRadius.circular(width * 0.03),
-            child: Image.network(
-              movie.getPosterUrl(),
-              fit: BoxFit.fill,
-              width: width * 0.3,
-              height: height * 0.2,
-            ),
+            child: movie.posterPath == null
+                ? Image.network(
+                    "https://images-na.ssl-images-amazon.com/images/I/91B32iU7ayL._AC_SL1500_.jpg",
+                    fit: BoxFit.fill,
+                    width: width * 0.3,
+                    height: height * 0.2,
+                  )
+                : Image.network(
+                    movie.getPosterUrl(),
+                    fit: BoxFit.fill,
+                    width: width * 0.3,
+                    height: height * 0.2,
+                  ),
           ),
           Expanded(
             child: Container(
@@ -57,7 +64,7 @@ class MovieScreen extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
         Container(
-            margin: EdgeInsets.only(right: width * 0.06),
+          margin: EdgeInsets.only(right: width * 0.06),
           width: width * 0.4,
           child: Text(
             movie.name,
